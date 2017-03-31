@@ -31,10 +31,11 @@ class RequestLoggerMiddleware(object):
 
         # KafkaProducer is an asynchronous message producer, so I can use it here and
         # it will transmit the request string asynchronously.
+        # the `request.body` attribute is already a byte string so it doesn't need type casting or encoding
         producer.send(
             topic='requests',
             key=b'request',
-            value=(str(request)).encode('utf-8')
+            value=request.body
         )
         after = datetime.datetime.now()
 
